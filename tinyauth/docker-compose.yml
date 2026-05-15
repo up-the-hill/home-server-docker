@@ -1,0 +1,13 @@
+services:
+  tinyauth:
+    container_name: tinyauth
+    image: ghcr.io/steveiliop56/tinyauth:v5
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    environment:
+      - TINYAUTH_APPURL=https://auth.thehill.top
+      - TINYAUTH_AUTH_USERS=avijya:$$2a$$10$$jkfrsvElqbgT90HhA9e4z.Ug3crWvQhEi/9M4D/3wVdOLnW4rjUo.
+    labels:
+      caddy: https://auth.thehill.top
+      caddy.reverse_proxy: "{{upstreams 3000}}"

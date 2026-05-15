@@ -1,0 +1,639 @@
+{
+	"logging": {
+		"logs": {
+			"default": {
+				"exclude": [
+					"http.log.access.log0"
+				]
+			},
+			"log0": {
+				"writer": {
+					"filename": "/var/log/caddy/access.log",
+					"output": "file",
+					"roll_keep": 5,
+					"roll_size_mb": 5
+				},
+				"include": [
+					"http.log.access.log0"
+				]
+			}
+		}
+	},
+	"apps": {
+		"crowdsec": {
+			"api_url": "http://192.168.0.254:8080/",
+			"api_key": "yLmLGg1Fumq7yxpFOwC2bqA8gYbIpQVm",
+			"ticker_interval": "60s",
+			"enable_streaming": true,
+			"enable_hard_fails": false
+		},
+		"http": {
+			"servers": {
+				"srv0": {
+					"listen": [
+						":443"
+					],
+					"routes": [
+						{
+							"match": [
+								{
+									"host": [
+										"thehill.top",
+										"*.thehill.top"
+									]
+								}
+							],
+							"handle": [
+								{
+									"handler": "subroute",
+									"routes": [
+										{
+											"handle": [
+												{
+													"encodings": {
+														"gzip": {},
+														"zstd": {}
+													},
+													"handler": "encode",
+													"prefer": [
+														"zstd",
+														"gzip"
+													]
+												},
+												{
+													"handler": "subroute",
+													"routes": [
+														{
+															"group": "group10",
+															"handle": [
+																{
+																	"handler": "subroute",
+																	"routes": [
+																		{
+																			"handle": [
+																				{
+																					"handler": "reverse_proxy",
+																					"upstreams": [
+																						{
+																							"dial": "192.168.0.254:3000"
+																						}
+																					]
+																				}
+																			]
+																		}
+																	]
+																}
+															],
+															"match": [
+																{
+																	"host": [
+																		"auth.thehill.top"
+																	]
+																}
+															]
+														},
+														{
+															"group": "group10",
+															"handle": [
+																{
+																	"handler": "subroute",
+																	"routes": [
+																		{
+																			"handle": [
+																				{
+																					"body": "Hello World!",
+																					"handler": "static_response"
+																				}
+																			]
+																		}
+																	]
+																}
+															],
+															"match": [
+																{
+																	"host": [
+																		"hello.thehill.top"
+																	]
+																}
+															]
+														},
+														{
+															"group": "group10",
+															"handle": [
+																{
+																	"handler": "subroute",
+																	"routes": [
+																		{
+																			"handle": [
+																				{
+																					"handle_response": [
+																						{
+																							"match": {
+																								"status_code": [
+																									2
+																								]
+																							},
+																							"routes": [
+																								{
+																									"handle": [
+																										{
+																											"handler": "vars"
+																										}
+																									]
+																								}
+																							]
+																						}
+																					],
+																					"handler": "reverse_proxy",
+																					"headers": {
+																						"request": {
+																							"set": {
+																								"X-Forwarded-Method": [
+																									"{http.request.method}"
+																								],
+																								"X-Forwarded-Uri": [
+																									"{http.request.uri}"
+																								]
+																							}
+																						}
+																					},
+																					"rewrite": {
+																						"method": "GET",
+																						"uri": "/api/auth/caddy"
+																					},
+																					"upstreams": [
+																						{
+																							"dial": "192.168.0.254:3000"
+																						}
+																					]
+																				},
+																				{
+																					"handler": "reverse_proxy",
+																					"upstreams": [
+																						{
+																							"dial": "192.168.0.254:8081"
+																						}
+																					]
+																				}
+																			]
+																		}
+																	]
+																}
+															],
+															"match": [
+																{
+																	"host": [
+																		"thehill.top"
+																	]
+																}
+															]
+														},
+														{
+															"group": "group10",
+															"handle": [
+																{
+																	"handler": "subroute",
+																	"routes": [
+																		{
+																			"handle": [
+																				{
+																					"handle_response": [
+																						{
+																							"match": {
+																								"status_code": [
+																									2
+																								]
+																							},
+																							"routes": [
+																								{
+																									"handle": [
+																										{
+																											"handler": "vars"
+																										}
+																									]
+																								}
+																							]
+																						}
+																					],
+																					"handler": "reverse_proxy",
+																					"headers": {
+																						"request": {
+																							"set": {
+																								"X-Forwarded-Method": [
+																									"{http.request.method}"
+																								],
+																								"X-Forwarded-Uri": [
+																									"{http.request.uri}"
+																								]
+																							}
+																						}
+																					},
+																					"rewrite": {
+																						"method": "GET",
+																						"uri": "/api/auth/caddy"
+																					},
+																					"upstreams": [
+																						{
+																							"dial": "192.168.0.254:3000"
+																						}
+																					]
+																				},
+																				{
+																					"handler": "reverse_proxy",
+																					"upstreams": [
+																						{
+																							"dial": "192.168.0.254:808"
+																						}
+																					]
+																				}
+																			]
+																		}
+																	]
+																}
+															],
+															"match": [
+																{
+																	"host": [
+																		"pihole.thehill.top"
+																	]
+																}
+															]
+														},
+														{
+															"group": "group10",
+															"handle": [
+																{
+																	"handler": "subroute",
+																	"routes": [
+																		{
+																			"handle": [
+																				{
+																					"handler": "reverse_proxy",
+																					"upstreams": [
+																						{
+																							"dial": "192.168.0.254:2283"
+																						}
+																					]
+																				}
+																			]
+																		}
+																	]
+																}
+															],
+															"match": [
+																{
+																	"host": [
+																		"immich.thehill.top"
+																	]
+																}
+															]
+														},
+														{
+															"group": "group10",
+															"handle": [
+																{
+																	"handler": "subroute",
+																	"routes": [
+																		{
+																			"handle": [
+																				{
+																					"handle_response": [
+																						{
+																							"match": {
+																								"status_code": [
+																									2
+																								]
+																							},
+																							"routes": [
+																								{
+																									"handle": [
+																										{
+																											"handler": "vars"
+																										}
+																									]
+																								}
+																							]
+																						}
+																					],
+																					"handler": "reverse_proxy",
+																					"headers": {
+																						"request": {
+																							"set": {
+																								"X-Forwarded-Method": [
+																									"{http.request.method}"
+																								],
+																								"X-Forwarded-Uri": [
+																									"{http.request.uri}"
+																								]
+																							}
+																						}
+																					},
+																					"rewrite": {
+																						"method": "GET",
+																						"uri": "/api/auth/caddy"
+																					},
+																					"upstreams": [
+																						{
+																							"dial": "192.168.0.254:3000"
+																						}
+																					]
+																				},
+																				{
+																					"handler": "reverse_proxy",
+																					"upstreams": [
+																						{
+																							"dial": "192.168.0.254:2116"
+																						}
+																					]
+																				}
+																			]
+																		}
+																	]
+																}
+															],
+															"match": [
+																{
+																	"host": [
+																		"status.thehill.top"
+																	]
+																}
+															]
+														},
+														{
+															"group": "group10",
+															"handle": [
+																{
+																	"handler": "subroute",
+																	"routes": [
+																		{
+																			"handle": [
+																				{
+																					"handle_response": [
+																						{
+																							"match": {
+																								"status_code": [
+																									2
+																								]
+																							},
+																							"routes": [
+																								{
+																									"handle": [
+																										{
+																											"handler": "vars"
+																										}
+																									]
+																								}
+																							]
+																						}
+																					],
+																					"handler": "reverse_proxy",
+																					"headers": {
+																						"request": {
+																							"set": {
+																								"X-Forwarded-Method": [
+																									"{http.request.method}"
+																								],
+																								"X-Forwarded-Uri": [
+																									"{http.request.uri}"
+																								]
+																							}
+																						}
+																					},
+																					"rewrite": {
+																						"method": "GET",
+																						"uri": "/api/auth/caddy"
+																					},
+																					"upstreams": [
+																						{
+																							"dial": "192.168.0.254:3000"
+																						}
+																					]
+																				},
+																				{
+																					"handler": "reverse_proxy",
+																					"upstreams": [
+																						{
+																							"dial": "192.168.0.254:8001"
+																						}
+																					]
+																				}
+																			]
+																		}
+																	]
+																}
+															],
+															"match": [
+																{
+																	"host": [
+																		"mm.thehill.top"
+																	]
+																}
+															]
+														},
+														{
+															"group": "group10",
+															"handle": [
+																{
+																	"handler": "subroute",
+																	"routes": [
+																		{
+																			"handle": [
+																				{
+																					"handle_response": [
+																						{
+																							"match": {
+																								"status_code": [
+																									2
+																								]
+																							},
+																							"routes": [
+																								{
+																									"handle": [
+																										{
+																											"handler": "vars"
+																										}
+																									]
+																								}
+																							]
+																						}
+																					],
+																					"handler": "reverse_proxy",
+																					"headers": {
+																						"request": {
+																							"set": {
+																								"X-Forwarded-Method": [
+																									"{http.request.method}"
+																								],
+																								"X-Forwarded-Uri": [
+																									"{http.request.uri}"
+																								]
+																							}
+																						}
+																					},
+																					"rewrite": {
+																						"method": "GET",
+																						"uri": "/api/auth/caddy"
+																					},
+																					"upstreams": [
+																						{
+																							"dial": "192.168.0.254:3000"
+																						}
+																					]
+																				},
+																				{
+																					"handler": "reverse_proxy",
+																					"upstreams": [
+																						{
+																							"dial": "192.168.0.254:8096"
+																						}
+																					]
+																				}
+																			]
+																		}
+																	]
+																}
+															],
+															"match": [
+																{
+																	"host": [
+																		"jellyfin.thehill.top"
+																	]
+																}
+															]
+														},
+														{
+															"group": "group10",
+															"handle": [
+																{
+																	"handler": "subroute",
+																	"routes": [
+																		{
+																			"handle": [
+																				{
+																					"handle_response": [
+																						{
+																							"match": {
+																								"status_code": [
+																									2
+																								]
+																							},
+																							"routes": [
+																								{
+																									"handle": [
+																										{
+																											"handler": "vars"
+																										}
+																									]
+																								}
+																							]
+																						}
+																					],
+																					"handler": "reverse_proxy",
+																					"headers": {
+																						"request": {
+																							"set": {
+																								"X-Forwarded-Method": [
+																									"{http.request.method}"
+																								],
+																								"X-Forwarded-Uri": [
+																									"{http.request.uri}"
+																								]
+																							}
+																						}
+																					},
+																					"rewrite": {
+																						"method": "GET",
+																						"uri": "/api/auth/caddy"
+																					},
+																					"upstreams": [
+																						{
+																							"dial": "192.168.0.254:3000"
+																						}
+																					]
+																				},
+																				{
+																					"handler": "reverse_proxy",
+																					"upstreams": [
+																						{
+																							"dial": "192.168.0.254:8096"
+																						}
+																					]
+																				}
+																			]
+																		}
+																	]
+																}
+															],
+															"match": [
+																{
+																	"host": [
+																		"goaccess.thehill.top"
+																	]
+																}
+															]
+														},
+														{
+															"group": "group10",
+															"handle": [
+																{
+																	"handler": "subroute",
+																	"routes": [
+																		{
+																			"handle": [
+																				{
+																					"body": "Not Found",
+																					"handler": "static_response",
+																					"status_code": 404
+																				}
+																			]
+																		}
+																	]
+																}
+															]
+														}
+													]
+												}
+											]
+										}
+									]
+								}
+							],
+							"terminal": true
+						}
+					],
+					"logs": {
+						"logger_names": {
+							"*.thehill.top": [
+								"log0"
+							],
+							"thehill.top": [
+								"log0"
+							]
+						}
+					}
+				}
+			}
+		},
+		"tls": {
+			"automation": {
+				"policies": [
+					{
+						"issuers": [
+							{
+								"challenges": {
+									"dns": {
+										"provider": {
+											"api_token": "2bvOc3IViMtzJYpqW44Bmu8o4s4tyXMMvQ-5WjQg",
+											"name": "cloudflare"
+										}
+									}
+								},
+								"module": "acme"
+							}
+						]
+					}
+				]
+			}
+		}
+	}
+}

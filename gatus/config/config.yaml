@@ -1,0 +1,25 @@
+endpoints:
+  - name: the hilltop
+    group: core
+    url: "https://thehill.top/"
+    interval: 5m
+    conditions:
+      - "[STATUS] == 200"
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+
+  - name: immich
+    group: services
+    url: "https://immich.thehill.top/"
+    interval: 5m
+    conditions:
+      - "[STATUS] == 200"
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+
+  - name: pi hole
+    group: services
+    # url: "https://pihole.thehill.top/admin"
+    url: "http://192.168.0.254:808/admin"
+    interval: 5m
+    conditions:
+      - "[STATUS] == 200"
+      # - "[CERTIFICATE_EXPIRATION] > 48h"

@@ -1,0 +1,14 @@
+services:
+  gatus:
+    container_name: gatus
+    image: twinproduction/gatus:latest
+    restart: always
+    ports:
+      - "2116:8080"
+    volumes:
+      - ./config:/config
+    networks:
+      - web
+
+networks:
+  web:

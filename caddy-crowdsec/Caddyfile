@@ -1,0 +1,111 @@
+{
+    acme_dns cloudflare {$CLOUDFLARE_API_KEY}
+    crowdsec {
+	api_url http://192.168.0.254:8080
+	api_key {$CROWDSEC_API_KEY}
+    }
+}
+
+(tinyauth_forwarder) {
+    forward_auth 192.168.0.254:3000 {
+	uri /api/auth/caddy
+    }
+}
+
+(logger) {
+    log {
+	output file /var/log/caddy/access.log {
+	    roll_size 5MB
+	    roll_keep 5
+	}
+    }
+}
+
+thehill.top, *.thehill.top {
+    encode
+    import logger
+
+    route {
+	crowdsec
+
+	@auth host auth.thehill.top
+	handle @auth {
+	    reverse_proxy 192.168.0.254:3000
+	}
+
+	@hello host hello.thehill.top
+	handle @hello {
+	    respond "Hello World!"
+	}
+
+	# thehill.top (root)
+	@root host thehill.top
+	handle @root {
+	    import tinyauth_forwarder *
+	    reverse_proxy 192.168.0.254:8081
+	}
+
+	@pihole host pihole.thehill.top
+	handle @pihole {
+	    import tinyauth_forwarder *
+	    reverse_proxy 192.168.0.254:808
+	}
+
+	@immich host immich.thehill.top
+	handle @immich {
+	    reverse_proxy 192.168.0.254:2283
+	}
+
+	@status host status.thehill.top
+	handle @status {
+	    import tinyauth_forwarder *
+	    reverse_proxy 192.168.0.254:2116
+	}
+
+	@mm host mm.thehill.top
+	handle @mm {
+	    import tinyauth_forwarder *
+	    reverse_proxy 192.168.0.254:8001
+	}
+
+	@jellyfin host jellyfin.thehill.top
+	handle @jellyfin {
+	    reverse_proxy 192.168.0.254:8096
+	}
+
+	@beszel host beszel.thehill.top
+	handle @beszel {
+	    import tinyauth_forwarder *
+	    reverse_proxy 192.168.0.254:8090
+	}
+
+	@ntfy host ntfy.thehill.top
+	handle @ntfy {
+	    # import tinyauth_forwarder *
+	    reverse_proxy 192.168.0.254:8083
+	}
+
+	@syncthing host syncthing.thehill.top
+	handle @syncthing { 
+	    import tinyauth_forwarder *
+	    reverse_proxy 192.168.0.254:8384 
+	} 
+
+	# @goaccess host goaccess.thehill.top
+	# handle @goaccess {
+	#     import tinyauth_forwarder *
+	#     reverse_proxy 192.168.0.254:8096
+	# }
+
+	# @nextcloud host nc.thehill.top
+	# handle @nextcloud {
+	#     # import tinyauth_forwarder *
+	#     reverse_proxy 192.168.0.254:11000
+	# }
+
+	# Fallback for otherwise unhandled domains under *.thehill.top
+	handle {
+	    respond "Not Found" 404
+	}
+    }
+}

@@ -1,0 +1,15 @@
+services:
+  cloudflare-ddns:
+    image: timothyjmiller/cloudflare-ddns:2.0.8
+    container_name: cloudflare-ddns
+    security_opt:
+      - no-new-privileges:true
+    network_mode: 'host'
+    environment:
+      - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN}
+      - DOMAINS=thehill.top
+      - PROXIED=false
+      - IP6_PROVIDER=none
+      # - HEALTHCHECKS=https://hc-ping.com/your-uuid
+      - REJECT_CLOUDFLARE_IPS=true
+    restart: unless-stopped

@@ -1,0 +1,198 @@
+- name: Monitor
+  # hide-desktop-navigation: true
+  columns:
+    - size: small
+      widgets:
+        - type: dns-stats
+          service: pihole-v6
+          url: http://192.168.0.254:808/
+          username: pi.hole
+          password: ${PIHOLE_PASSWORD}
+    - size: full 
+      widgets:
+        - type: monitor
+          cache: 10m
+          title: Services
+          sites:
+            # - title: Gitea
+            #   url: https://gitea.yourdomain.com
+            #   icon: /assets/gitea.png
+            # - title: Nginx Proxy Manager
+            #   # url: http://192.168.0.254:81/
+            #   url: https://nginx.thehill.top/
+            #   icon: /assets/nginx-proxy-manager.png
+            # - title: pangolin
+            #   url: https://pangolin.thehill.top/
+            #   icon: /assets/pangolin.png
+            - title: Immich
+              # url: http://192.168.0.254:2283/
+              url: https://immich.thehill.top/
+              icon: /assets/immich.png
+              alt-status-codes:
+                - 401
+
+            - title: Pi Hole
+              # url: http://192.168.0.254:808/admin/
+              url: https://pihole.thehill.top/admin/
+              icon: /assets/pi-hole.png
+              alt-status-codes:
+                - 401
+
+            - title: Gatus
+              # url: http://192.168.0.254:2116/
+              url: https://status.thehill.top/
+              icon: /assets/gatus.png
+              alt-status-codes:
+                - 401
+
+            - title: Media Manager  
+              # url: http://192.168.0.254:8001/
+              url: https://mm.thehill.top/
+              icon: /assets/media-manager.png
+              alt-status-codes:
+                - 401
+
+            - title: Jellyfin
+              # url: http://192.168.0.254:8001/
+              url: https://jellyfin.thehill.top/
+              icon: /assets/jellyfin.png
+              alt-status-codes:
+                - 401
+
+            # - title: NextCloud
+            #   # url: http://192.168.0.254:8082/
+            #   url: https://nc.thehill.top/
+            #   icon: /assets/jellyfin.png
+            #   alt-status-codes:
+            #     - 401
+
+            - title: Beszel
+              url: https://beszel.thehill.top/
+              icon: /assets/beszel.png
+              alt-status-codes:
+                - 401
+
+            - title: Ntfy
+              url: https://ntfy.thehill.top/
+              icon: /assets/ntfy.png
+              alt-status-codes:
+                - 401
+
+            - title: Syncthing
+              url: https://syncthing.thehill.top/
+              icon: /assets/syncthing.png
+              alt-status-codes:
+                - 401
+
+            - title: TinyAuth
+              url: https://auth.thehill.top/
+              icon: /assets/tinyauth.png
+              alt-status-codes:
+                - 401
+
+        - type: monitor
+          cache: 10m
+          title: Media
+          sites:
+            - title: Prowlarr
+              url: http://192.168.0.254:9696/
+              icon: /assets/prowlarr.png
+
+            - title: Radarr
+              url: http://192.168.0.254:7878/
+              icon: /assets/radarr.png
+
+            - title: Bazarr
+              url: http://192.168.0.254:6767/
+              icon: /assets/bazarr.png
+
+            - title: Seerr
+              url: http://192.168.0.254:5055/
+              icon: /assets/seerr.png
+
+            - title: qBittorrent
+              url: http://192.168.0.254:1702/
+              icon: /assets/qbittorrent.png
+
+        - type: server-stats
+          servers:
+            - type: local
+              name: Services
+# - name: Home
+#   # Optionally, if you only have a single page you can hide the desktop navigation for a cleaner look
+#   # hide-desktop-navigation: true
+#   columns:
+#     - size: small
+#       widgets:
+#         - type: calendar
+#           first-day-of-week: monday
+#
+#         - type: rss
+#           limit: 10
+#           collapse-after: 3
+#           cache: 12h
+#           feeds:
+#             - url: https://www.joshwcomeau.com/rss.xml
+#               title: Josh Comeau
+#
+#         # - type: twitch-channels
+#         #   channels:
+#         #     - theprimeagen
+#         #     - j_blow
+#         #     - giantwaffle
+#         #     - cohhcarnage
+#         #     - christitustech
+#         #     - EJ_SA
+#
+#     - size: full
+#       widgets:
+#         - type: group
+#           widgets:
+#             - type: hacker-news
+#             - type: lobsters
+#
+#         # - type: videos
+#         #   channels:
+#         #     - UCHnyfMqiRRG1u-2MsSQLbXA # Veritasium
+#         #     - everydaylouie
+#
+#         - type: group
+#           widgets:
+#             - type: reddit
+#               subreddit: technology
+#               show-thumbnails: true
+#             - type: reddit
+#               subreddit: selfhosted
+#               show-thumbnails: true
+#
+#     - size: small
+#       widgets:
+#         - type: weather
+#           location: Sydney, Australia
+#           units: metric # alternatively "imperial"
+#           hour-format: 24h # alternatively "12h"
+#           # Optionally hide the location from being displayed in the widget
+#           # hide-location: true
+#
+#         - type: markets
+#           markets:
+#             - symbol: SPY
+#               name: S&P 500
+#             - symbol: BTC-USD
+#               name: Bitcoin
+#             - symbol: NVDA
+#               name: NVIDIA
+#             - symbol: AAPL
+#               name: Apple
+#             - symbol: MSFT
+#               name: Microsoft
+#
+#         - type: releases
+#           cache: 1d
+#           # Without authentication the Github API allows for up to 60 requests per hour. You can create a
+#           # read-only token from your Github account settings and use it here to increase the limit.
+#           # token: ...
+#           repositories:
+#             - glanceapp/glance
+#             - immich-app/immich
+#             - syncthing/syncthing

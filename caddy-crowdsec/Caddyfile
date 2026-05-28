@@ -58,14 +58,7 @@ thehill.top, *.thehill.top {
 
 	@status host status.thehill.top
 	handle @status {
-	    import tinyauth_forwarder *
 	    reverse_proxy 192.168.0.254:2116
-	}
-
-	@mm host mm.thehill.top
-	handle @mm {
-	    import tinyauth_forwarder *
-	    reverse_proxy 192.168.0.254:8001
 	}
 
 	@jellyfin host jellyfin.thehill.top
@@ -85,10 +78,9 @@ thehill.top, *.thehill.top {
 	    reverse_proxy 192.168.0.254:8083
 	}
 
-	@syncthing host syncthing.thehill.top
-	handle @syncthing { 
-	    import tinyauth_forwarder *
-	    reverse_proxy 192.168.0.254:8384 
+	@forgejo host git.thehill.top
+	handle @forgejo { 
+	    reverse_proxy 192.168.0.254:3030 
 	} 
 
 	# @goaccess host goaccess.thehill.top

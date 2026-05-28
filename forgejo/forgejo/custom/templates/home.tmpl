@@ -1,0 +1,16 @@
+{{template "base/head" .}}
+<div role="main" aria-label="{{if .IsSigned}}{{ctx.Locale.Tr "dashboard"}}{{else}}{{ctx.Locale.Tr "home"}}{{end}}" class="page-content home" style="display: flex; flex-direction: column; justify-content: center; min-height: calc(100dvh - 200px);">
+	<div class="tw-mb-8 tw-px-8">
+		<div class="center">
+			<img class="logo" width="120" height="120" src="{{AssetUrlPrefix}}/img/logo.svg" alt="{{ctx.Locale.Tr "logo"}}" style="margin-bottom: 20px;">
+			<div class="hero">
+				<h1 class="ui icon header title">
+					{{AppDisplayName}}
+				</h1>
+				<h2>{{ctx.Locale.Tr "startpage.app_desc"}}</h2>
+			</div>
+		</div>
+	</div>
+	<!-- {{template "home_forgejo" .}} -->
+</div>
+{{template "base/footer" .}}

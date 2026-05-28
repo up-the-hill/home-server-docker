@@ -84,6 +84,12 @@
               alt-status-codes:
                 - 401
 
+            - title: Forgejo
+              url: https://git.thehill.top/
+              icon: /assets/forgejo.png
+              alt-status-codes:
+                - 401
+
             - title: TinyAuth
               url: https://auth.thehill.top/
               icon: /assets/tinyauth.png
@@ -101,6 +107,14 @@
             - title: Radarr
               url: http://192.168.0.254:7878/
               icon: /assets/radarr.png
+
+            - title: Sonarr
+              url: http://192.168.0.254:8989/
+              icon: /assets/sonarr.png
+
+            - title: Flaresolverr
+              url: http://192.168.0.254:8191/
+              icon: /assets/flaresolverr.png
 
             - title: Bazarr
               url: http://192.168.0.254:6767/

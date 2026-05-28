@@ -1,10 +1,24 @@
 endpoints:
   - name: the hilltop
     group: core
-    url: "https://thehill.top/"
+    url: "http://192.168.0.254:8081/"
     interval: 5m
     conditions:
       - "[STATUS] == 200"
+
+  - name: the hilltop cert
+    group: core
+    url: "https://thehill.top/"
+    interval: 5m
+    conditions:
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+
+  - name: gatus
+    group: core
+    url: "https://status.thehill.top/"
+    interval: 5m
+    conditions:
+      - "[STATUS] == any(200, 401)"
       - "[CERTIFICATE_EXPIRATION] > 48h"
 
   - name: immich
@@ -12,14 +26,106 @@ endpoints:
     url: "https://immich.thehill.top/"
     interval: 5m
     conditions:
-      - "[STATUS] == 200"
+      - "[STATUS] == any(200, 401)"
       - "[CERTIFICATE_EXPIRATION] > 48h"
 
   - name: pi hole
     group: services
-    # url: "https://pihole.thehill.top/admin"
-    url: "http://192.168.0.254:808/admin"
+    url: "http://192.168.0.254:808/admin/"
     interval: 5m
     conditions:
       - "[STATUS] == 200"
-      # - "[CERTIFICATE_EXPIRATION] > 48h"
+
+  - name: jellyfin
+    group: services
+    url: "https://jellyfin.thehill.top/"
+    interval: 5m
+    conditions:
+      - "[STATUS] == any(200, 401)"
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+
+  - name: beszel
+    group: services
+    url: "http://192.168.0.254:8090/api/health"
+    interval: 5m
+    conditions:
+      - "[STATUS] == 200"
+
+  - name: ntfy
+    group: services
+    url: "http://192.168.0.254:8083/v1/health"
+    interval: 5m
+    conditions:
+      - "[STATUS] == 200"
+
+  - name: syncthing
+    group: services
+    url: "http://192.168.0.254:8384/"
+    interval: 5m
+    conditions:
+      - "[STATUS] == 200"
+
+  - name: forgejo
+    group: services
+    url: "https://git.thehill.top/"
+    interval: 5m
+    conditions:
+      - "[STATUS] == 200"
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+
+  - name: tinyauth
+    group: services
+    url: "https://auth.thehill.top/"
+    interval: 5m
+    conditions:
+      - "[STATUS] == any(200, 401)"
+      - "[CERTIFICATE_EXPIRATION] > 48h"
+
+  - name: prowlarr
+    group: media
+    url: "http://192.168.0.254:9696/"
+    interval: 5m
+    conditions:
+      - "[STATUS] == 200"
+
+  - name: radarr
+    group: media
+    url: "http://192.168.0.254:7878/"
+    interval: 5m
+    conditions:
+      - "[STATUS] == 200"
+
+  - name: sonarr
+    group: media
+    url: "http://192.168.0.254:8989/"
+    interval: 5m
+    conditions:
+      - "[STATUS] == 200"
+
+  - name: flaresolverr
+    group: media
+    url: "http://192.168.0.254:8191/"
+    interval: 5m
+    conditions:
+      - "[STATUS] == 200"
+
+  - name: bazarr
+    group: media
+    url: "http://192.168.0.254:6767/"
+    interval: 5m
+    conditions:
+      - "[STATUS] == 200"
+
+  - name: seerr
+    group: media
+    url: "http://192.168.0.254:5055/"
+    interval: 5m
+    conditions:
+      - "[STATUS] == 200"
+
+  - name: qbittorrent
+    group: media
+    url: "http://192.168.0.254:1702/"
+    interval: 5m
+    conditions:
+      - "[STATUS] == 200"

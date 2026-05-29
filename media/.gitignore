@@ -1,0 +1,9 @@
+.env
+bazarr/
+data/
+downloads/
+prowlarr/
+qbittorrent/
+radarr/
+seerr/
+sonarr/

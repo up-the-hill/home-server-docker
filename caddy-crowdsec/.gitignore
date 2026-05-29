@@ -1,0 +1,6 @@
+.env
+caddy-data/
+caddy-config/
+caddy-logs/
+Caddyfile.bak
+adapt.txt
